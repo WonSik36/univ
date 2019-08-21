@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- 참조: http://bootstrapk.com/examples/theme/ -->
+<html>
+	<head>
+    	<% include ../partials/head %>
+    	<!-- Paging script *not completed -->
+		<script src="/javascripts/page.js"></script>
+    	<!-- Style CSS -->
+	</head>
+	<body role="document">
+		<% include ../partials/nav %>
+		<div class="container theme-showcase" role="main" style= "position:relative;top:60px;margin-bottom: 100px">
+			<% include ../partials/jumbo_month %>
+<!-- ############################################ -->
+	      	<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+		        <div class="carousel-inner" role="listbox">
+		          <div class="item active">
+		            <canvas id="chart" width="600" height="400" style="padding-left: 10%; padding-right: 10%;"></canvas>
+		          </div>
+		        </div>
+		        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+		          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+		          <span class="sr-only">Previous</span>
+		        </a>
+		        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+		          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+		          <span class="sr-only">Next</span>
+		        </a>
+		    </div>
+		    <span style="text-align: right"><h3 id="total"><%= message  %> 총 사용 금액: <strong><%= total %> 원</strong></h3></span>
+		    <hr>
+<!-- ############################################ -->
+			<div>
+				<table class="table">
+	            <thead>
+	              <tr>
+	                <th>#</th>
+	                <th>날짜</th>
+	                <th>금액</th>
+	                <th>사용내역</th>
+	                <th>분류</th>
+	                <th>삭제</th>
+	              </tr>
+	            </thead>
+	            <tbody style="color: black">
+	            </tbody>
+	          </table>
+				<script>
+					$(document).ready(function(){
+						$.ajax({
+							type:"GET",
+							url: "../data/month",
+							dataType: "json",
+							error : function(){
+								alert("데이터 통신 실패!");
+							},
+							success : function(data){
+								var date=new Date();
+								var year=0,mon=0,day=0;
+								var dateStr="", str="";
+
+								for(var i=0; i<data.length; i++){
+									date = new Date(data[i].date);
+									year=date.getFullYear();
+									mon=date.getMonth()+1;
+									day=date.getDate();
+									dateStr = year+"-"+mon+"-"+day;
+									str = "<tr>";
+									str+="<td><a href=/pages/edit/"+data[i].id+">"+(i+1)+"</a></td>"; // #
+									str+="<td><a href=/pages/edit/"+data[i].id+">"+dateStr+"</a></td>"; // 날짜
+									str+="<td><a href=/pages/edit/"+data[i].id+">"+data[i].money+"</a></td>"; // 금액
+									str+="<td><a href=/pages/edit/"+data[i].id+">"+data[i].detail+"</a></td>"; // 사용내역
+									str+="<td><a href=/pages/edit/"+data[i].id+">"+cat[data[i].class]+"</a></td>"; // 분류
+									str+="<td><a href=/pages/delete/"+data[i].id+">Delete</a></td>"; // 삭제
+									str+="</tr>";
+									$("tbody").append(str);
+									delete date;
+								}
+							}
+						});
+					});
+				</script>
+	         </div>
+		    <hr>
+      	</div>
+      	<% include ../partials/chart_pie.ejs %>
+	</body>
+</html>

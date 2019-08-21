@@ -1,0 +1,6 @@
+	s	t	x	y	z
+s	0	6	INF	7	2
+t	INF	0	-5	8	-4
+x	INF	-2	0	INF	INF
+y	INF	INF	-3	0	9
+z	INF	INF	7	INF	0

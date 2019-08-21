@@ -1,0 +1,55 @@
+<script>
+  var myCanvas = document.getElementById("chart");
+  var cat = {1:"용돈/기타",2:"식비",3:"주거/통신",4:"생활용품",5:"의복/미용",6:"건강/문화",7:"교육/육아",8:"교통/차량",9:"경조사/회비"};
+  var lab = [<%= label %>];
+  var lab_update = [];
+  for(var i in lab)
+    lab_update.push(cat[lab[i]]);
+
+  Chart.defaults.global.defaultFontFamily = "Lato";
+  Chart.defaults.global.defaultFontSize = 18;
+  var chartData = {
+    labels: lab_update,
+    datasets: [{
+      data: [<%= data %>],
+      backgroundColor: [
+      	"#FF6384",
+		    "#63FF84",
+		    "#84FF63",
+    		"#8463FF",
+    		"#6384FF",
+    		"#FFD732",
+    		"#D27328",
+    		"#FFBEBE",
+    		"#BC55EF"
+      ]
+    }]
+  };
+
+  var chartOptions = {
+    legend: {
+      display: true,
+      labels: {
+              boxWidth: 120
+            }
+    },
+      scales: {
+      xAxes: [{
+        barPercentage: 1,
+        gridLines: {
+          display: false
+        },
+        scaleLabel: {
+          display: true,
+          labelString: "날짜",
+        },
+      }]
+    }
+  };
+
+  var lineChart = new Chart(myCanvas, {
+    type: 'pie',
+    data: chartData,
+    options: {responsive:true}
+  });
+</script>

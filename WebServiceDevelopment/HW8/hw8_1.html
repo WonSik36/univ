@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script>
+            //get nth fibonacci number
+            function fibo(num){
+                if(num == 0)
+                    return 0;
+                else if(num == 1)
+                    return 1;
+                else
+                    return fibo(num-1)+fibo(num-2);
+            }
+            //make fibonacci array
+            function makeFiboArray(num){
+                var arr = [];
+                for(i=0; i<num; i++){
+                    arr.push(fibo(i));
+                }
+                return arr;
+            }
+        </script>
+    </head>
+    <body>
+        <script>
+            //print fibonacci array
+            document.write(makeFiboArray(30).join(" "));
+        </script>
+    </body>
+</html>

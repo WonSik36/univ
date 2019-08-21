@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- 참조: http://bizmark.co.kr/archives/144 -->
+<html>
+	<head>
+    	<% include ../partials/head %>
+    	<!-- Style CSS -->
+    	<script>
+    	var message = "<%= message %>";
+			if(message != null && message.length > 0)
+				  alert(message);
+		</script>
+	</head>
+	<article class="container">
+        <div class="col-md-12">
+        	<div class="page-header">
+    	    	<h1>회원가입</h1>
+        	</div>
+        	<form class="form-horizontal" action="/pages/signup" method="post">
+        	<div class="form-group">
+          		<label class="col-sm-3 control-label" for="inputEmail">이메일</label>
+        		<div class="col-sm-6">
+          			<input class="form-control" id="inputEmail" type="email" placeholder="이메일" name="uid">
+        		</div>
+        	</div>
+        	<div class="form-group">
+          		<label class="col-sm-3 control-label" for="inputPassword">비밀번호</label>
+        		<div class="col-sm-6">
+          			<input class="form-control" id="inputPassword" type="password" placeholder="비밀번호" name="pw">
+        		<p class="help-block">숫자, 특수문자 포함 8자 이상</p>
+        		</div>
+        	</div>
+          	<div class="form-group">
+            	<label class="col-sm-3 control-label" for="inputPasswordCheck">비밀번호 확인</label>
+             	<div class="col-sm-6">
+              		<input class="form-control" id="inputPasswordCheck" type="password" placeholder="비밀번호 확인" onkeyup="PWcheck()" onkeydown="PWcheck()">
+                	<p id ="pwchkhp" class="help-block">비밀번호를 한번 더 입력해주세요.</p>
+             	</div>
+          	</div>
+            <div class="col-sm-12 text-center">
+              <button class="btn btn-primary" type="submit">회원가입<i class="fa fa-check spaceLeft"></i></button>
+              <a href="/" class="btn btn-danger" type="submit">가입취소<i class="fa fa-times spaceLeft"></i></a>
+            </div>
+        	</form>
+          	<hr>
+        </div>
+    </article>
+    <script>
+      function PWcheck(){
+        var inputPassword = $("#inputPassword").val();
+        var inputPasswordCheck = $("#inputPasswordCheck").val()
+
+        if(inputPasswordCheck.length == 0){
+          $("#pwchkhp").text("비밀번호를 한번 더 입력해주세요.");
+          $("button:eq(0)").prop("disabled", true);
+        }
+        else if(inputPassword != inputPasswordCheck){
+          $("#pwchkhp").text("비밀번호가 일치하지 않습니다.");
+          $("button:eq(0)").prop("disabled", true);
+        }else{
+          $("#pwchkhp").text("비밀번호가 일치합니다.");
+          $("button:eq(0)").prop("disabled", false);
+        }
+      }
+    </script>
+  </body>
+</html>

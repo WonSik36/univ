@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            //get edges by using prompt
+            var edge1 = prompt("Input the first length of the edge.", "Type Edge Length");
+            var edge2 = prompt("Input the second length of the edge.", "Type Edge Length");
+            var edge3 = prompt("Input the third length of the edge.", "Type Edge Length");
+            var edges = [edge1, edge2, edge3];
+
+            //calculate areas and volume
+            var area1 = edge1*edge2;
+            var area2 = edge2*edge3;
+            var area3 = edge3*edge1;
+            var areas = [area1, area2, area3];
+
+            var volume = edge1*edge2*edge3;
+
+            //print edges
+            document.write("The given length of edge of a cuboid is " + edges.join("-")+"<br>");
+            document.write("The surface area is "+areas.join("-")+" and the volume is "+volume);
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

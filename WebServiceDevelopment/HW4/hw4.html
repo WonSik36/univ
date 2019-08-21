@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>HW4</title>
+	</head>
+	<body>
+		<h3>Sign Up Page</h3>
+		<form action="hw4.php" method="POST">
+			<fieldset>
+			<legend>Type Your Personal Information</legend>
+				<p>Name <input type="text" name="name"></p>
+				<br>
+
+				<p>ID <input type="text" name="id"></p>
+				<p>Password <input type="password" name="password"></p>
+				<br>
+
+				<p>Gender
+					<input type="radio" name="gender" value="M">Male
+					<input type="radio" name="gender" value="F">Female
+				</p>
+				Major
+					<br>
+					<input type="checkbox" name="major[]" value="GLS">Global Leadership School
+					<input type="checkbox" name="major[]" value="IS">International Studies
+					<input type="checkbox" name="major[]" value="LL">Language Literature
+					<br>
+
+					<input type="checkbox" name="major[]" value="Man">Management
+					<input type="checkbox" name="major[]" value="Eco">Economics
+					<input type="checkbox" name="major[]" value="CS">Computer Science
+					<br>
+
+					<input type="checkbox" name="major[]" value="EE">Electrical Engineering
+					<input type="checkbox" name="major[]" value="GE">Global Entrepreneurship
+					<input type="checkbox" name="major[]" value="ICT">Information Communication Technology
+					<br>
+				<p>
+					Year
+					<select name="year">
+						<option value="1">Freshman</option>
+						<option value="2">Sophomore</option>
+						<option value="3">Junior</option>
+						<option value="4">Senior</option>
+					</select>
+				</p>
+				<br>
+				<p>Message
+					<br>
+					<textarea name="message" cols="30" rows="10"></textarea>
+				</p>
+			</fieldset>
+			<input type="submit" value="Submit">
+		</form>
+	</body>
+</html>

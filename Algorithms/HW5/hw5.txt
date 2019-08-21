@@ -1,0 +1,30 @@
+/**************************************************************************
+	Algorithm Analysis(ITP) HW5
+
+	21300691 Cheung Won Sik
+
+	How to Compile Code to Program
+	1. (on command line) gcc hw5.c -o hw5.out
+	2. It should be compiled in mac, linux operating system
+
+	How to Execute Program
+	1. (on command line) ./hw5.out
+	   -> It automatically use "hw5.data" to input data
+	2. (on command line) ./hw5.out (file_name)
+	   -> use "file_name" to input data
+
+	Input File Assumption
+	1. given data's column and row order should be same
+
+	Return of program
+	1.Array of adjacency list of given graph
+	2.Run Bellman-Ford's algorithm and print result & running time
+	3.Run Dijtstra's algorithm and print result & running time
+	4.Run Floyd-Warshall's algorithm and print result & running time
+
+	Screenshot
+	1.png : example of given data (hw5.data)
+	2.png : example of given data with graph which has negative weight edge (test1.data)
+	3.png : example of graph data with graph which has negative weight cycle (test2.data)
+
+**************************************************************************/

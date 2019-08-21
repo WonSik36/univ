@@ -1,0 +1,35 @@
+안녕하세요 웹 서비스 개발 TA 신현웅입니다.
+
+Homework 2의 과제 문제중 errata가 있어 수정공지 합니다.
+
+
+
+Prog1 에서 Specification of table
+
+idx: int, auto_increment
+student_no: int, not null, primary key
+semester: int, not null
+name: varchar(20), not null
+major1: varchar(20), not null
+major2: varchar(20) 
+어트리뷰트에 auto_increment 옵션을 주기 위해서는 해당 어트리뷰트가 key이여야 하므로 
+기존의 조건 대신 아래와 같이 idx를 primary key로 지정하여 테이블을 생성하시기 바랍니다.
+
+
+
+변경된 내용
+
+idx: int, auto_increment, primary key
+student_no: int, not null
+semester: int, not null
+name: varchar(20), not null
+major1: varchar(20), not null
+major2: varchar(20)
+
+
+
+반드시 변경사항을 적용하여 과제를 진행해주시기 바랍니다.
+
+
+
+감사합니다.

@@ -1,0 +1,31 @@
+h2{
+	font-family: "Times New Roman", Times, serif;
+	text-align: right;
+}
+#sunbin{
+	font-size: 80%;
+}
+#name{
+	font-weight: bold;
+}
+#major{
+	font-style: oblique;
+}
+dd{
+	line-height: 1.2;
+	letter-spacing: 1.5px;
+	word-spacing: 3px;
+}
+#bird{
+	text-decoration: underline;
+}
+dl{
+	text-indent: 30px;
+}
+#cloud{
+	color : #ACF3FF;
+	text-shadow: 3px 6px 10px #ACF3FF;
+}
+li{
+	text-transform: capitalize;
+}

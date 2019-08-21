@@ -1,0 +1,13 @@
+color		*	*
+font-family	*	*
+font-size	*	*
+font-weight	*	*
+font-style	*	*
+line-height	*	*
+letter-spcaing	*	*
+word-spacing	*	*
+text-align	*	*
+text-decoration	*	*
+text-indent	*	*
+text-shadow	*	*	
+text-transform	*	*

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            while(true){
+                var num = prompt("Input a positive integer", "Type a number");
+
+                //using parseFloat function to make string to number
+                //using Number.isInteger to check number
+                if(num > 0 && Number.isInteger(parseFloat(num))){
+                    break;
+                }
+
+                alert("Input number is not a positive integer");
+            }
+
+            //find factors
+            var i = num;
+            var arr = [];
+            while(i != 1){
+                var j = 2;
+                while(true){
+                    if(i%j == 0){
+                        arr.push(j);
+                        i /= j;
+                        break;
+                    }
+                    j++;
+                }
+            }
+
+            //sort array by descending order
+            arr.sort(function(a,b){return b-a});
+            //print the result
+            document.write(num+", "+ arr.join("*"));
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

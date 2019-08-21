@@ -1,0 +1,45 @@
+<script>
+  var myCanvas = document.getElementById("chart");
+  var cat = {1:"용돈/기타",2:"식비",3:"주거/통신",4:"생활용품",5:"의복/미용",6:"건강/문화",7:"교육/육아",8:"교통/차량",9:"경조사/회비"};
+  Chart.defaults.global.defaultFontFamily = "Lato";
+  Chart.defaults.global.defaultFontSize = 18;
+  var chartData = {
+    labels: [<%= label %>],
+    datasets: [{
+      label: "사용 금액(원)",
+      data: [<%= data %>],
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)'
+    }]
+  };
+
+  var chartOptions = {
+    legend: {
+      display: true,
+      labels: {
+              boxWidth: 120
+            }
+    },
+      scales: {
+      xAxes: [{
+        barPercentage: 1,
+        gridLines: {
+          display: false
+        },
+        scaleLabel: {
+          display: true,
+          labelString: "날짜",
+        },
+      }],
+      yAxes: [{
+      ticks:{beginAtZero:true}
+      }]
+    }
+  };
+
+  var lineChart = new Chart(myCanvas, {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions
+  });
+</script>
