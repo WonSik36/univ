@@ -1,0 +1,8 @@
+hw4: hw4.o ExclusiveQueue.o
+	gcc hw4.o ExclusiveQueue.o -o hw4 -lpthread
+
+hw4.o: hw4.c
+	gcc -c hw4.c
+
+ExclusiveQueue.o: ExclusiveQueue.c
+	gcc -c ExclusiveQueue.c
