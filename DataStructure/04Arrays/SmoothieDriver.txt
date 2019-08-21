@@ -1,0 +1,36 @@
+
+/* file: SmoothieDriver.cpp */
+
+/** smoothie() takes an array of ints.
+ * On completion the array contains the same numbers, but wherever the array
+ * copy of the number.  Hence, after smoothie() is done, no two consecutive
+ * numbers in the array are the same.
+ * 
+ * Author: Youngsup Kim
+ * 2014/03/15	Creation
+ * 
+ */
+
+#include <stdio.h>
+
+void smoothie(int a[], int n);
+
+void main(int argc, char *argv[]) {
+	int i;
+	//int a[] = {1, 1};					// for test
+	int a[] = { 0, 0, 0, 0, 1, 1, 0, 0, 0, 3, 3, 3, 1, 1, 0 };
+	//int a[] = {2, 3, 7, 4, 2, 2 };		
+	//int a[] = {1};
+
+	int n = sizeof(a) / sizeof(int);		// not using a magic number!
+
+	printf("Before smoothie: ");
+	for (i = 0; i < n; i++) printf("%d ", a[i]); 
+	printf("\n");
+	
+	smoothie(a, n);
+
+	printf(" After smoothie: ");
+	for (i = 0; i < n; i++) printf("%d ", a[i]); 
+	printf("\n");
+}

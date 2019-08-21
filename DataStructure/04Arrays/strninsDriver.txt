@@ -1,0 +1,31 @@
+/* file: strninsDriver.cpp */
+
+/**
+ * This program test strnins() and strninsExtended().
+ * Author: Youngsup Kim
+ * 03/15/2014	Created
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 100
+void strnins(char *s, char *t, int i);			// Program 2.12
+void strninsModified(char *s, char *t, int i);	// without using temp
+char *strninsExtended(const char *s, const char *t, int i); // homework
+
+void main(void) {
+	char myStr[MAX_SIZE] = { "God is good! " };
+	char urStr[MAX_SIZE] = { "All the time! " };
+	char hisStr[MAX_SIZE] = { "Computer is a joy!" };
+	char herStr[MAX_SIZE] = { "programming " };
+
+	strnins(myStr, urStr, strlen(myStr));
+	printf("myStr=%s \n", myStr);
+	
+	strninsModified(urStr, myStr, strlen(urStr));	
+	printf("urStr=%s \n", urStr);
+
+	printf("hisStr=%s\n", strninsExtended(hisStr, herStr, 9));
+}
