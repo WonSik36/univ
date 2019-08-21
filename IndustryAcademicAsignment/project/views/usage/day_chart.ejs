@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>한동대학교 전력사용량 대시보드</title>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+	 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script>jQuery.noConflict()</script>
+	<script src="/javascripts/jquery-3.2.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+	<script src="/javascripts/moment.js"></script>
+	<script src="/javascripts/chart_util.js"></script>
+	</head>
+    <body>
+		<div style="width: 80%; height: 50%; border-color: blue; margin: 30px">
+			<h3>어제 총 전력 사용량</h3>
+			<img src="/images/한동대학교 로고.jpg" style="width: 200px; height: 70px; position:absolute; right:120px; top:30px;">
+			<h5>은혜관 1층</h5>
+    		<canvas id="canvas" width="600" height="400"></canvas>
+    		<select class="custom-select" style="width:200px">
+    			<option selected>장소</option>
+    		</select>
+    		<select class="custom-select" style="width:200px">
+    			<option selected>시간</option>
+    		</select>
+    		<select class="custom-select" style="width:200px">
+    			<option selected>단위</option>
+    		</select>
+    	</div>
+    	<script>
+			var config = {
+				type: 'bar',
+				data: {
+					labels: [<%= label %>],
+					datasets: [{
+						label: "Energy Usage",
+						data: [<%= data %>],
+						backgroundColor: 'rgb(255, 99, 132)',
+      					borderColor: 'rgb(255, 99, 132)'
+					}],
+			    },
+			    options: {
+			    	responsive: false,
+			    	title:{
+			    		display: false,
+			    		text: '1층 시간별 에너지 사용량'
+			    	},
+	                legend:{
+	                	display: true,
+					    position: 'top',
+					    labels: {
+					      boxWidth: 80,
+					      fontColor: 'black'
+					    }
+	                },
+	                scales: {
+	                    xAxes: [{
+	                        barPercentage: 0.8,
+					        gridLines: {
+					          display: false
+					        },
+					        scaleLabel: {
+					          display: true,
+					          labelString: "날짜",
+					        },
+	                    }],
+	                    yAxes: [{
+	                        gridLines: {
+						        color: "black",
+						        borderDash: [2, 5],
+						      },
+						    scaleLabel: {
+	                            display: true,
+	                            labelString: 'positiveEnergy(kwh)'
+	                        },
+	                        ticks:{beginAtZero:true}
+	                    }]
+	                }
+			    }
+			}
+
+			//window.onload = function() {
+	            var ctx = document.getElementById("canvas").getContext("2d");
+	            window.myChart = new Chart(ctx, config);
+	        //};
+
+		</script>
+</body>
+</html>

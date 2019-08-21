@@ -1,0 +1,20 @@
+sensor.real_time:
+  friendly_name: "시간"
+  icon: mdi:alarm
+sensor.real_elec1:
+  friendly_name: "실시간 소비전력1"
+  icon: mdi:pulse
+
+sensor.real_elec2:
+  friendly_name: "realTime2"
+  icon: mdi:pulse
+sensor.real_elec3:
+  friendly_name: "realTime3"
+  icon: mdi:pulse
+sensor.real_elec4:
+  friendly_name: "realTime4"
+  icon: mdi:pulse
+sensor.real_elec5:
+  friendly_name: "realTime5"
+  icon: mdi:pulse
+

@@ -1,0 +1,102 @@
+<!-- views/partials/real_usage.ejs -->
+<script>
+var chartData = {
+	labels: [],
+	datasets: [{
+		label: "Realtime Energy Usage",
+		data: [],
+		lineTension: 0.5,
+		fill: false,
+		borderColor: 'skyblue',
+		backgroundColor: 'transparent',
+		pointBorderColor: 'skyblue',
+	    pointBackgroundColor: 'skyblue',
+	    borderDash: [5, 5],
+	    pointRadius: 5,
+	    pointHoverRadius: 10,
+	    pointHitRadius: 30,
+	    pointBorderWidth: 2,
+	    pointStyle: 'rectRounded'
+	}],
+};
+
+var chartOptions = {
+	responsive: false,
+	title:{
+		display: true,
+		text: '1층 실시간 에너지 사용량'
+	},
+	tooltips:{
+		mode: 'index',
+		intersect: false
+	},
+	hover:{
+        mode: 'nearest',
+        intersect: true
+    },
+    legend:{
+    	display: true,
+	    position: 'top',
+	    labels: {
+	      boxWidth: 80,
+	      fontColor: 'black'
+	    }
+    },
+    scales: {
+        xAxes: [{
+        	type: "time",
+            time: {
+		        unit: 'second',
+		        unitStepSize: 15,
+		        round: 'second',
+		        tooltipFormat: "h:mm:ss a",
+		        displayFormats: {
+		          second: 'h:mm:ss A'
+	        	}
+	        },
+	        distribution: 'linear', // <-> series
+	        gridLines: {
+	        	display: false
+	        }
+        }],
+        yAxes: [{
+            gridLines: {
+		        color: "black",
+		        borderDash: [2, 5],
+		      },
+		    scaleLabel: {
+                display: true,
+                labelString: 'activePower(kw)'
+            },
+            ticks:{beginAtZero:true,
+            	maxTicksLimit: 5}
+        }]
+    }
+};
+
+// 차트 설정
+$(document).ready(function() {
+    var ctx = document.getElementById("canvas").getContext("2d");
+    window.myChart = new Chart(ctx,{
+    	type: 'line',
+    	data: chartData,
+    	options: chartOptions
+    });
+    updateData(1, 'real')
+});
+
+// /data 에 실시간 사용량 요청 후 차트 업데이트
+function updateData(site, period){
+	//alert(window.myChart);
+	var url = "/data/"+site+"/"+period;
+	$.getJSON(url, function(data){
+		chartData.labels = data.timestamp;
+		chartData.datasets[0].data = data.value;
+		window.myChart.update();
+	});
+}
+
+// 5초 간격으로 updateData 실행
+var interval = setInterval("updateData(1, 'real')", 5000); //timePeriod 5 sec
+
+</script>
