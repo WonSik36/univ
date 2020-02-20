@@ -1,0 +1,8 @@
+#lang plai
+;problem 1
+;solved by myself: Y
+;time taken: 5min 
+(define (dollar->won money)
+  (* 1200 money))
+
+(test (dollar->won 3) 3600)

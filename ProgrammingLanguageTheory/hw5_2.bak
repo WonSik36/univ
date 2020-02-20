@@ -1,0 +1,171 @@
+#lang plai
+
+; Programming Language Theory 02
+; HW5 Understanding Variables(Task 1)
+; 21300691 WonSik Cheung
+
+; solve by myself
+; 20 minutes
+
+;********************************************* Concrete Syntax ******************************************
+;<BMFAE> ::= <num>
+;         | {+ <BMFAE> <BMFAE>}
+;         | {- <BMFAE> <BMFAE>}
+;         | <id>
+;         | {fun {<id>} <BMFAE>}
+;         | {<BMFAE> <BMFAE>}
+;         | {newbox <BMFAE>} ;define/initalize box
+;         | {setbox <BMFAE> <BMFAE>} ;update a box
+;         | {openbox <BMFAE>}  ;;extract value from a box
+;         | {seqn <BMFAE> <BMFAE>} ;; run two expression sequentially
+;         | {setvar <id> <BMFAE>}
+
+
+;********************************************* Abstract Syntax ******************************************
+(define-type BMFAE
+    [num (n number?)]
+    [add (lhs BMFAE?) (rhs BMFAE?)]
+    [sub (lhs BMFAE?) (rhs BMFAE?)]
+    [id (name symbol?)]
+    [fun (param symbol?) (body BMFAE?)]
+    [app (fun-expr BMFAE?) (arg-expr BMFAE?)]
+    [newbox  (v BMFAE?)]
+    [setbox  (bn BMFAE?) (v BMFAE?)]
+    [openbox  (v BMFAE?)]
+    [seqn  (ex1 BMFAE?) (ex2 BMFAE?)]
+    [setvar (id symbol?) (val-expr BMFAE?)])
+
+(define-type DefrdSub
+    [mtSub]
+    [aSub (name symbol?)(address integer?)(ds DefrdSub?)])
+
+(define-type Store
+            [mtSto]
+            [aSto  (address integer?) (value BMFAE-Value?) (rest Store?)])
+
+(define-type BMFAE-Value
+    [numV (n number?)]
+    [closureV (param symbol?) (body BMFAE?) (ds DefrdSub?)]
+    [boxV (address integer?)])
+
+(define-type Value*Store
+  [v*s (value BMFAE-Value?) (store Store?)])
+
+;[contract]: sexp → BMFAE
+;[purpose]: parse sexp to BMFAE
+(define (parse sexp)
+   (match sexp
+        [(? number?) (num sexp)]
+        [(list '+ l r) (add (parse l) (parse r))]
+        [(list '- l r) (sub (parse l) (parse r))]
+        [(list 'with (list i v) e) (app (fun i (parse e)) (parse v))]  ;; with is deprecated but I'll use it
+        [(? symbol?) (id sexp)]
+        [(list 'fun (list p) b) (fun p (parse b))]  ;; e.g., {fun {x} {+ x 1}}
+        [(list 'newbox v) (newbox (parse v))]
+        [(list 'setbox i v) (setbox (parse i) (parse v))]
+        [(list 'openbox i) (openbox (parse i))]
+        [(list 'seqn e1 e2) (seqn (parse e1) (parse e2))]
+        [(list 'setvar i v) (setvar i (parse v))]
+        [(list f a) (app (parse f) (parse a))] ;; app
+        [else (error 'parse "bad syntax: ~a" sexp)]))
+
+;[contract]: BMFAE-Value BMFAE-Value -> BMFAE-Value
+;[purpose]: calculate two BMFAE-Value with given operator
+(define (num-op op)
+     (lambda (x y)
+          (numV (op (numV-n x) (numV-n y)))))
+
+;[contract]: BMFAE-Value BMFAE-Value -> BMFAE-Value
+;[purpose]: add BMFAE-Value to BMFAE-Value
+(define num+ (num-op +))
+
+;[contract]: BMFAE-Value BMFAE-Value -> BMFAE-Value
+;[purpose]: subtract BMFAE-Value to BMFAE-Value
+(define num- (num-op -))
+
+;[contract]: symbol DefrdSub -> address
+;[purpose]: get address from defered sub
+(define (lookup name ds)
+    (type-case DefrdSub ds
+        [mtSub  () (error 'lookup "free variable")]
+        [aSub    (i adr rest)
+                 (if (symbol=? i name)
+                     adr (lookup name rest))]))
+
+;[contract]: address Store -> BMFAE-Value
+;[purpose]: get BMFAE value from Store by using address
+(define (store-lookup address st)
+    (type-case Store st
+        [mtSto  () (error 'store-lookup "No value at address")]
+        [aSto    (adr v rest)
+                 (if (= adr address)
+                     v (store-lookup address rest))]))
+
+;[contract]: Store -> Integer
+;[purpose]: get address which is maximum address +1 (maximum address is from store)
+(define (malloc st)
+    (+ 1 (max-address st)))
+
+;[contract]: Store -> Integer
+;[purpose]: get address which has maximum address in store
+(define (max-address st)
+    (type-case Store st
+        [mtSto () 0]
+        [aSto (n v st)
+                  (max n (max-address st))])) ;; check all address in Store
+
+;[contract]: expr1 expr2 DefrdSub Store handle -> Value*Store
+;[purpose]: Handle two expression (for sugaring)
+(define (interp-two expr1 expr2 ds st handle)
+    (type-case Value*Store (interp expr1 ds st)
+        [v*s (val1 st2)
+    (type-case Value*Store (interp expr2 ds st2)
+        [v*s (val2 st3)  ;; st3 has value of va1 and val2
+             (handle val1 val2 st3)])]))
+
+
+;[contract]: BMFAE DefrdSub Store -> Value*Store
+;[purpose]: interpret BMFAE to BMFAE-Value by using defered sub
+(define (interp bmfae ds st)
+    (type-case BMFAE bmfae
+        [num (n) (v*s (numV n) st)]
+        [add  (l r) (interp-two l r ds st (lambda (v1 v2 st1) (v*s (num+ v1 v2) st1)))]
+        [sub  (l r) (interp-two l r ds st (lambda (v1 v2 st1) (v*s (num- v1 v2) st1)))]
+        [id     (name) (v*s (store-lookup (lookup name ds) st) st)]
+        [fun   (param body-expr) (v*s (closureV param body-expr ds) st)]
+        [app (f a) (interp-two f a ds st (lambda (f-value a-value a-store)
+                    (local ([define new-address (malloc a-store)]) ;; get new address for a-value which has max-address+1 (max-address from a-store)
+                                   (interp (closureV-body f-value)
+                                           (aSub (closureV-param f-value) new-address (closureV-ds f-value))
+                                           (aSto new-address a-value a-store)))))]
+        [newbox (v) (type-case Value*Store (interp v ds st) [v*s (vl st1)
+                    (local [(define adr (malloc st1))]
+                            (v*s (boxV adr) (aSto adr vl st1)))])] ;; new box has address of BMFAE-Value
+
+        [setbox (bx v) (interp-two bx v ds st (lambda (bx-val val st1) (v*s val (aSto (boxV-address bx-val) val st1))))]
+      
+        [openbox (bx) (type-case Value*Store (interp bx ds st) [v*s (bx-val st1)
+                            (v*s (store-lookup (boxV-address bx-val)st1)st1)])]
+        [seqn (e1 e2) (interp-two e1 e2 ds st (lambda (v1 v2 st1) (v*s v2 st1)))]
+        [setvar (id val-expr) (local[(define adr (lookup id ds))]
+                                (type-case Value*Store (interp val-expr ds st)
+                                  [v*s (val st) (v*s val (aSto adr val st))]))]
+))
+
+;[contract]: sexp DefrdSub Store -> Value*Store
+;[purpose]: parse sexp to BMFAE and interpret BMFAE to Value*Store
+(define (run sexp ds st)
+     (interp (parse sexp) ds st))
+
+;[contract]: sexp -> BMFAE-Value
+;[purpose]: parse sexp to BMFAE and interpret BMFAE to BMFAE-Value
+(define (run-value sexp)
+     (v*s-value (interp (parse sexp) (mtSub) (mtSto))))
+
+
+;******************************************************************** TEST ********************************************************
+
+(test (run '{with {a 3} {setvar a 5}} (mtSub) (mtSto)) (v*s (numV 5) (aSto 1 (numV 5) (aSto 1 (numV 3) (mtSto)))))
+(test (run '{with {a 3} {seqn {{fun {x} {setvar x 5}} a} a}} (mtSub) (mtSto)) (v*s (numV 3) (aSto 2 (numV 5) (aSto 2 (numV 3) (aSto 1 (numV 3) (mtSto))))))
+(test (run-value '{with {swap {fun {x} {fun {y} {with {z x} {seqn {setvar x y}{setvar y z}}}}}}
+                  {with {a 10} {with {b 20} {seqn {{swap a} b} a}}}}) (numV 10))
